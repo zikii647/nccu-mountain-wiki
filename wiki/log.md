@@ -4,6 +4,27 @@
 
 ---
 
+## [2026-11-22] ingest | 匯入「白姑大山（辣辣辣辣，2025-04）」隊伍檔案（完成全量 21/21 原始檔匯入！）
+
+- **來源檔案（1 隊共 3 份）**：
+  - `raw/辣辣辣辣計劃書.docx`
+  - `raw/檢討--白姑大山.docx`
+  - `raw/辣辣辣辣菜單.xlsx`
+- **新增／異動頁面**：
+  - 新增 [trips/2025-04-baigu-mountain.md](./trips/2025-04-baigu-mountain.md)
+  - 更新 [lessons/schedule-and-night-hiking-pitfalls.md](./lessons/schedule-and-night-hiking-pitfalls.md)（補充 D2 回程隊距拉長與鋒面午後雨提早起登策略）
+  - 更新 [lessons/gear-check-and-winter-warmth-pitfalls.md](./lessons/gear-check-and-winter-warmth-pitfalls.md)（補充無線電連兩隊沒電、5L 大水袋難背改用 2L 水袋、生火勿掛隊旗與食材收內帳）
+  - 更新 [lessons/food-and-menu-pitfalls.md](./lessons/food-and-menu-pitfalls.md)（補充燴飯改飯料分煮、52.2L 缺水路線藏水策略與剩水動態估算）
+  - 更新 [lessons/retreat-and-navigation-emergency-pitfalls.md](./lessons/retreat-and-navigation-emergency-pitfalls.md)（補充 D1 水管維護岔路迷途辨識法與鋒面多預報判讀）
+  - 更新 [trips/2025-12-daba-four-peaks.md](./trips/2025-12-daba-four-peaks.md)（跨隊確認大霸第二組採買表係殘留自本隊第二組採買表）
+  - 更新 [index.md](./index.md)
+- **個資脫敏執行**：已全數移除隊員、留守與司機之聯絡電話、學號（含台大學號）與緊急聯絡人電話，僅保留姓名／暱稱與社團角色。
+- **發現之高風險與異常提醒**：
+  - **高風險**：無線電又發生行進間沒電且計畫書未列隊內頻道；D2 回程隊距拉長難以掌控；公裝缺濾水器支數、缺 1 天份預備糧明細、2,880m 高海拔露營睡墊／風衣／毛帽標彈性且保暖手套留白；林班地生火掛隊旗風險。
+  - **文件異常與缺漏**：D1（H2045m）與 D3（H1560m）最後農家登山口海拔矛盾；重要時程行前會早於完成計畫書；留守範例殘留「奇萊」且缺逾時通報死線；無逐點實走紀錄與結算表。
+
+---
+
 ## [2026-11-22] ingest | 匯入「南湖群峰馬比杉山線（湖湖哈哈，2025-06）」隊伍檔案
 
 - **來源檔案（1 隊共 5 份）**：
