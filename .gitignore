@@ -1,6 +1,13 @@
 # 保護含個資之原始檔案，避免進入 Git 歷史或意外外流
 raw/
 
+# 環境變數與部署暫存檔（切勿將真實金鑰提交至 Git）
+.env
+.env.*
+!.env.example
+.vercel/
+node_modules/
+
 # Office 暫存檔
 ~$*.docx
 ~$*.xlsx

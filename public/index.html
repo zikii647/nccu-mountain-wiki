@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>政大登山隊 Wiki 知識庫問答</title>
+  <style>
+    :root {
+      --pine-dark: #112a20;
+      --pine: #1e563f;
+      --pine-hover: #286e51;
+      --gold: #c98a2c;
+      --bg-page: #f3f6f4;
+      --bg-card: #ffffff;
+      --border: #d8e2dc;
+      --text-main: #1b2a24;
+      --text-muted: #566b62;
+      --warn-bg: #fff7e6;
+      --warn-border: #d97706;
+      --warn-text: #7c3b00;
+      --caution-bg: #fef2f2;
+      --caution-border: #dc2626;
+      --caution-text: #7f1d1d;
+      --note-bg: #eef5f1;
+      --note-border: #1e563f;
+      --note-text: #153c2c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, sans-serif;
+    }
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 920px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      box-shadow: 0 0 40px rgba(17, 42, 32, 0.08);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--pine-dark) 0%, var(--pine) 100%);
+      color: #ffffff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 3px solid var(--gold);
+    }
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 1.15rem;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+    .brand-sub {
+      font-size: 0.76rem;
+      color: #cde0d7;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-link, .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+    .btn-link {
+      background: var(--gold);
+      color: #16241d;
+      border: none;
+    }
+    .btn-link:hover { background: #dda03e; }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.12);
+      color: #f0f6f3;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.22); }
+
+    /* Quick questions bar */
+    .quick-bar {
+      padding: 10px 16px;
+      background: #f8faf9;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+    .quick-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-right: 2px;
+    }
+    .quick-chip {
+      background: #ffffff;
+      color: var(--pine);
+      border: 1px solid #bfd3c8;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .quick-chip:hover {
+      background: var(--pine);
+      color: #ffffff;
+      border-color: var(--pine);
+    }
+
+    /* Chat messages */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #fbfcfb;
+    }
+    .msg {
+      display: flex;
+      flex-direction: column;
+      max-width: 90%;
+    }
+    .msg.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+    .msg.assistant {
+      align-self: flex-start;
+      align-items: flex-start;
+      max-width: 96%;
+    }
+    .bubble {
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.62;
+      word-break: break-word;
+    }
+    .msg.user .bubble {
+      background: var(--pine);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.assistant .bubble {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 8px rgba(17, 42, 32, 0.04);
+    }
+    .msg.error .bubble {
+      background: var(--caution-bg);
+      color: var(--caution-text);
+      border-color: #fecaca;
+    }
+
+    /* Markdown inside assistant bubble */
+    .bubble h1, .bubble h2, .bubble h3 {
+      margin: 10px 0 6px;
+      color: var(--pine-dark);
+      line-height: 1.35;
+    }
+    .bubble h1:first-child, .bubble h2:first-child, .bubble h3:first-child { margin-top: 0; }
+    .bubble h1 { font-size: 1.12rem; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+    .bubble h2 { font-size: 1.04rem; }
+    .bubble h3 { font-size: 0.98rem; }
+    .bubble p { margin: 0 0 8px; }
+    .bubble p:last-child { margin-bottom: 0; }
+    .bubble ul, .bubble ol { margin: 4px 0 10px; padding-left: 1.35rem; }
+    .bubble li { margin: 4px 0; }
+    .bubble code {
+      background: #edf3f0;
+      color: #143f2d;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.86em;
+    }
+    .bubble .wiki-ref {
+      display: inline-block;
+      background: #e6f2ec;
+      color: #134733;
+      border: 1px solid #bdd8cb;
+      padding: 0 6px;
+      border-radius: 5px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.82em;
+      margin: 0 2px;
+    }
+    .bubble table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 0.86rem;
+      display: block;
+      overflow-x: auto;
+    }
+    .bubble th, .bubble td {
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .bubble th { background: #eff5f2; color: var(--pine-dark); }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--note-border);
+      background: var(--note-bg);
+      color: var(--note-text);
+      padding: 9px 12px;
+      border-radius: 7px;
+      margin: 8px 0;
+      font-size: 0.9rem;
+    }
+    .callout-title { font-weight: 700; margin-bottom: 3px; }
+    .callout-warning {
+      background: var(--warn-bg);
+      border-left-color: var(--warn-border);
+      color: var(--warn-text);
+    }
+    .callout-caution {
+      background: var(--caution-bg);
+      border-left-color: var(--caution-border);
+      color: var(--caution-text);
+    }
+    .sources-bar {
+      margin-top: 8px;
+      padding-top: 7px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* Typing indicator */
+    .typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--pine);
+      border-radius: 50%;
+      animation: bounce 1.1s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.18s; }
+    .dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Input form */
+    .composer {
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .composer textarea {
+      flex: 1;
+      resize: none;
+      min-height: 44px;
+      max-height: 130px;
+      padding: 10px 12px;
+      border: 1px solid #c3d3cb;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--text-main);
+      outline: none;
+    }
+    .composer textarea:focus { border-color: var(--pine); box-shadow: 0 0 0 2px rgba(30, 86, 63, 0.14); }
+    .btn-send {
+      background: var(--pine);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-send:hover { background: var(--pine-hover); }
+    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Passcode modal */
+    .gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 29, 22, 0.86);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+    .gate-overlay.hidden { display: none; }
+    .gate-card {
+      width: min(400px, 100%);
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      border-top: 6px solid var(--gold);
+    }
+    .gate-card h2 {
+      margin: 0 0 8px;
+      color: var(--pine-dark);
+      font-size: 1.25rem;
+    }
+    .gate-card p {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .gate-card input {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid #c3d3cb;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    .gate-card input:focus { border-color: var(--pine); }
+    .gate-card button {
+      width: 100%;
+      padding: 11px;
+      background: var(--pine);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .gate-card button:hover { background: var(--pine-hover); }
+    .gate-card button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .gate-error {
+      color: #b91c1c;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      min-height: 1.2em;
+    }
+    .gate-deck-link {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.84rem;
+      color: var(--pine);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .header { padding: 12px 14px; }
+      .brand h1 { font-size: 1.04rem; }
+      .messages { padding: 14px 12px; }
+      .msg, .msg.assistant { max-width: 100%; }
+      .quick-bar { padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gate-overlay" id="gate-overlay" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <form class="gate-card" id="gate-form">
+      <h2 id="gate-title">🏔️ 政大登山隊 Wiki 問答</h2>
+      <p>為保護社團內部出隊知識庫與 API 額度，請輸入<strong>社團通關密碼</strong>後進入查詢。</p>
+      <input type="password" id="passcode-input" placeholder="請輸入社團通關密碼" autocomplete="current-password" required>
+      <button type="submit" id="gate-submit">驗證並進入</button>
+      <div class="gate-error" id="gate-error"></div>
+      <a class="gate-deck-link" href="./deck.html" target="_blank" rel="noopener">📑 直接開啟「新領隊開隊速成簡報」</a>
+    </form>
+  </div>
+
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <h1>🏔️ 政大登山隊 Wiki 知識庫問答</h1>
+        <span class="brand-sub">最高宗旨：確保大家上山安全平安｜回答嚴格附 wiki/ 出處</span>
+      </div>
+      <div class="header-actions">
+        <a class="btn-link" href="./deck.html" target="_blank" rel="noopener">📑 新領隊開隊簡報</a>
+        <button type="button" class="btn-ghost" id="btn-clear">清除對話</button>
+        <button type="button" class="btn-ghost" id="btn-logout">登出</button>
+      </div>
+    </header>
+
+    <div class="quick-bar" aria-label="幹部常用快捷提問">
+      <span class="quick-label">⚡ 快捷提問：</span>
+      <button type="button" class="quick-chip" data-q="冬季 2500m+ 裝檢必帶什麼？">冬季 2500m+ 裝檢必帶什麼？</button>
+      <button type="button" class="quick-chip" data-q="行前倒隊條件有哪些？">行前倒隊條件有哪些？</button>
+      <button type="button" class="quick-chip" data-q="出隊財務結算怎麼算？">出隊財務結算怎麼算？</button>
+      <button type="button" class="quick-chip" data-q="留守人回報機制是什麼？">留守人回報機制是什麼？</button>
+    </div>
+
+    <main class="messages" id="messages" aria-live="polite"></main>
+
+    <form class="composer" id="chat-form">
+      <textarea id="question-input" rows="1" placeholder="輸入登山計畫、裝備、體訓、菜單或踩坑問題…（Enter 送出，Shift+Enter 換行）" required></textarea>
+      <button type="submit" class="btn-send" id="btn-send">送出</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "nccu_wiki_passcode";
+      const gateOverlay = document.getElementById("gate-overlay");
+      const gateForm = document.getElementById("gate-form");
+      const passcodeInput = document.getElementById("passcode-input");
+      const gateSubmit = document.getElementById("gate-submit");
+      const gateError = document.getElementById("gate-error");
+
+      const messagesEl = document.getElementById("messages");
+      const chatForm = document.getElementById("chat-form");
+      const questionInput = document.getElementById("question-input");
+      const btnSend = document.getElementById("btn-send");
+      const btnClear = document.getElementById("btn-clear");
+      const btnLogout = document.getElementById("btn-logout");
+
+      let history = [];
+      let isBusy = false;
+
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderInline(text) {
+        let out = escapeHtml(text);
+        // Inline code
+        out = out.replace(/`([^`]+)`/g, (_, code) => {
+          if (/^wiki\/[A-Za-z0-9_./-]+\.md$/.test(code)) {
+            return `<span class="wiki-ref">${code}</span>`;
+          }
+          return `<code>${code}</code>`;
+        });
+        // Bare wiki/...md references not already wrapped
+        out = out.replace(/(^|[\s（(：:,、])(wiki\/[A-Za-z0-9_./-]+\.md)/g, '$1<span class="wiki-ref">$2</span>');
+        // Bold
+        out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        return out;
+      }
+
+      function renderMarkdown(md) {
+        const lines = md.replace(/\r\n/g, "\n").split("\n");
+        const html = [];
+        let i = 0;
+
+        while (i < lines.length) {
+          const line = lines[i];
+          const trimmed = line.trim();
+
+          if (!trimmed) { i++; continue; }
+
+          // Headings
+          const hMatch = trimmed.match(/^(#{1,3})\s+(.*)$/);
+          if (hMatch) {
+            const lvl = hMatch[1].length;
+            html.push(`<h${lvl}>${renderInline(hMatch[2])}</h${lvl}>`);
+            i++;
+            continue;
+          }
+
+          // Callout / Blockquote
+          const calloutMatch = trimmed.match(/^>\s*\[!(WARNING|CAUTION|IMPORTANT|NOTE|TIP)\]\s*(.*)$/i);
+          if (calloutMatch) {
+            const type = calloutMatch[1].toLowerCase();
+            const title = calloutMatch[2].trim() || type.toUpperCase();
+            const body = [];
+            i++;
+            while (i < lines.length && lines[i].trim().startsWith(">")) {
+              const b = lines[i].trim().replace(/^>\s?/, "");
+              if (b) body.push(renderInline(b));
+              i++;
+            }
+            const icon = type === "caution" ? "🚨 " : type === "warning" ? "⚠️ " : type === "tip" ? "🧭 " : "📌 ";
+            const cls = type === "caution" ? "callout callout-caution" : type === "warning" ? "callout callout-warning" : "callout";
+            html.push(`<div class="${cls}"><div class="callout-title">${icon}${renderInline(title)}</div><div>${body.join("<br>")}</div></div>`);
+            continue;
+          }
+
+          if (trimmed.startsWith(">")) {
+            const qLines = [];
+            while (i < lines.length && lines[i].trim().startsWith(">")) {
+              qLines.push(renderInline(lines[i].trim().replace(/^>\s?/, "")));
+              i++;
+            }
+            html.push(`<div class="callout">${qLines.join("<br>")}</div>`);
+            continue;
+          }
+
+          // Table
+          if (trimmed.startsWith("|") && trimmed.endsWith("|")) {
+            const tLines = [];
+            while (i < lines.length && lines[i].trim().startsWith("|") && lines[i].trim().endsWith("|")) {
+              tLines.push(lines[i].trim());
+              i++;
+            }
+            if (tLines.length >= 2) {
+              const headers = tLines[0].slice(1, -1).split("|").map((c) => c.trim());
+              const hasSep = /^\|[\s:|-]+\|$/.test(tLines[1]);
+              const rows = hasSep ? tLines.slice(2) : tLines.slice(1);
+              let tbl = "<table><thead><tr>" + headers.map((h) => `<th>${renderInline(h)}</th>`).join("") + "</tr></thead><tbody>";
+              for (const r of rows) {
+                const cells = r.slice(1, -1).split("|").map((c) => c.trim());
+                tbl += "<tr>" + cells.map((c) => `<td>${renderInline(c)}</td>`).join("") + "</tr>";
+              }
+              tbl += "</tbody></table>";
+              html.push(tbl);
+            }
+            continue;
+          }
+
+          // Unordered list
+          if (/^\s*[-*]\s+/.test(line)) {
+            const items = [];
+            while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+              const itemText = lines[i].replace(/^\s*[-*]\s+/, "").replace(/^\[ \]\s+/, "☐ ").replace(/^\[[xX]\]\s+/, "☑ ");
+              items.push(`<li>${renderInline(itemText)}</li>`);
+              i++;
+            }
+            html.push(`<ul>${items.join("")}</ul>`);
+            continue;
+          }
+
+          // Ordered list
+          if (/^\s*\d+\.\s+/.test(line)) {
+            const items = [];
+            while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+              const itemText = lines[i].replace(/^\s*\d+\.\s+/, "");
+              items.push(`<li>${renderInline(itemText)}</li>`);
+              i++;
+            }
+            html.push(`<ol>${items.join("")}</ol>`);
+            continue;
+          }
+
+          // Paragraph
+          const pLines = [];
+          while (
+            i < lines.length &&
+            lines[i].trim() &&
+            !/^(#{1,3}\s+|>|\||\s*[-*]\s+|\s*\d+\.\s+)/.test(lines[i])
+          ) {
+            pLines.push(renderInline(lines[i].trim()));
+            i++;
+          }
+          html.push(`<p>${pLines.join("<br>")}</p>`);
+        }
+
+        return html.join("");
+      }
+
+      function appendMessage(role, content, { isError = false, sources = [] } = {}) {
+        const wrap = document.createElement("div");
+        wrap.className = `msg ${role}${isError ? " error" : ""}`;
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        if (role === "user") {
+          bubble.textContent = content;
+        } else {
+          bubble.innerHTML = renderMarkdown(content);
+          if (sources && sources.length > 0) {
+            const srcBar = document.createElement("div");
+            srcBar.className = "sources-bar";
+            srcBar.innerHTML =
+              "<span>📚 引用來源：</span>" +
+              sources.map((s) => `<span class="wiki-ref">${escapeHtml(s)}</span>`).join("");
+            bubble.appendChild(srcBar);
+          }
+        }
+        wrap.appendChild(bubble);
+        messagesEl.appendChild(wrap);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return wrap;
+      }
+
+      function appendTyping() {
+        const wrap = document.createElement("div");
+        wrap.className = "msg assistant";
+        wrap.innerHTML =
+          '<div class="bubble"><span class="typing"><span>正在檢索社團 Wiki</span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>';
+        messagesEl.appendChild(wrap);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return wrap;
+      }
+
+      function resetWelcome() {
+        history = [];
+        messagesEl.innerHTML = "";
+        appendMessage(
+          "assistant",
+          "哈囉！歡迎使用 **政大登山隊 Wiki 知識庫問答**。\n\n你可以直接點擊上方的快捷提問，或輸入開隊規定、行程配速、體訓標準、高山菜單、裝備檢查、留守回報、財務結算或歷屆踩坑案例。\n\n> [!NOTE] 使用原則\n> 所有回答皆**嚴格依據社團 `wiki/` 內容並附檔名出處**；若 Wiki 未記載會直接誠實告知，不會憑空捏造。"
+        );
+      }
+
+      function showGate(msg = "") {
+        gateError.textContent = msg;
+        gateOverlay.classList.remove("hidden");
+        setTimeout(() => passcodeInput.focus(), 50);
+      }
+
+      function hideGate() {
+        gateOverlay.classList.add("hidden");
+        gateError.textContent = "";
+      }
+
+      gateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const code = passcodeInput.value.trim();
+        if (!code) return;
+        gateSubmit.disabled = true;
+        gateSubmit.textContent = "驗證中…";
+        gateError.textContent = "";
+        try {
+          const resp = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ passcode: code, verifyOnly: true }),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) {
+            gateError.textContent = data.error || "通關密碼驗證失敗，請再試一次。";
+          } else {
+            sessionStorage.setItem(STORAGE_KEY, code);
+            passcodeInput.value = "";
+            hideGate();
+            if (messagesEl.children.length === 0) resetWelcome();
+          }
+        } catch {
+          gateError.textContent = "無法連線至伺服器，請確認網路或部署狀態。";
+        } finally {
+          gateSubmit.disabled = false;
+          gateSubmit.textContent = "驗證並進入";
+        }
+      });
+
+      async function sendQuestion(q) {
+        const question = q.trim();
+        if (!question || isBusy) return;
+        const passcode = sessionStorage.getItem(STORAGE_KEY);
+        if (!passcode) {
+          showGate("請先輸入社團通關密碼。");
+          return;
+        }
+
+        isBusy = true;
+        btnSend.disabled = true;
+        questionInput.value = "";
+        questionInput.style.height = "44px";
+
+        appendMessage("user", question);
+        const typingEl = appendTyping();
+
+        try {
+          const resp = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              passcode,
+              question,
+              history,
+            }),
+          });
+          const data = await resp.json().catch(() => ({}));
+          typingEl.remove();
+
+          if (resp.status === 401) {
+            sessionStorage.removeItem(STORAGE_KEY);
+            appendMessage("assistant", data.error || "通關密碼已失效，請重新驗證。", { isError: true });
+            showGate("通關密碼驗證失敗，請重新輸入。");
+            return;
+          }
+
+          if (!resp.ok) {
+            appendMessage("assistant", data.error || `查詢失敗（HTTP ${resp.status}）`, { isError: true });
+            return;
+          }
+
+          appendMessage("assistant", data.answer, { sources: data.sources || [] });
+          history.push({ role: "user", content: question });
+          history.push({ role: "assistant", content: data.answer });
+        } catch {
+          typingEl.remove();
+          appendMessage("assistant", "網路連線異常，請稍後再試。", { isError: true });
+        } finally {
+          isBusy = false;
+          btnSend.disabled = false;
+          questionInput.focus();
+        }
+      }
+
+      chatForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        sendQuestion(questionInput.value);
+      });
+
+      questionInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendQuestion(questionInput.value);
+        }
+      });
+
+      questionInput.addEventListener("input", () => {
+        questionInput.style.height = "44px";
+        questionInput.style.height = Math.min(questionInput.scrollHeight, 130) + "px";
+      });
+
+      document.querySelectorAll(".quick-chip").forEach((btn) => {
+        btn.addEventListener("click", () => sendQuestion(btn.dataset.q || ""));
+      });
+
+      btnClear.addEventListener("click", () => resetWelcome());
+      btnLogout.addEventListener("click", () => {
+        sessionStorage.removeItem(STORAGE_KEY);
+        resetWelcome();
+        showGate("已登出，請重新輸入社團通關密碼。");
+      });
+
+      // Init
+      resetWelcome();
+      if (sessionStorage.getItem(STORAGE_KEY)) {
+        hideGate();
+      } else {
+        showGate();
+      }
+    })();
+  </script>
+</body>
+</html>
