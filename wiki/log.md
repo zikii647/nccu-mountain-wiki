@@ -4,6 +4,27 @@
 
 ---
 
+## [2026-11-22] ingest | 匯入「南湖群峰馬比杉山線（湖湖哈哈，2025-06）」隊伍檔案
+
+- **來源檔案（1 隊共 5 份）**：
+  - `raw/湖湖哈哈計劃書.docx`、`raw/湖湖哈哈計劃書(1).docx`（已比對兩版差異，確認屬同隊修訂版）
+  - `raw/馬比杉線紀錄.docx`（確認即為本隊 2025/06/23–28 實走紀錄）
+  - `raw/湖湖哈哈菜單.xlsx`
+  - `raw/湖湖哈哈體訓.xlsx`
+- **新增／異動頁面**：
+  - 新增 [trips/2025-06-nanhu-mabisang.md](./trips/2025-06-nanhu-mabisang.md)
+  - 新增 [guides/training-and-conditioning-sop.md](./guides/training-and-conditioning-sop.md)（提煉社團行前體訓菜單、出隊折抵規則與大背 75% 負重經驗法則）
+  - 更新 [lessons/gear-check-and-winter-warmth-pitfalls.md](./lessons/gear-check-and-winter-warmth-pitfalls.md)（補充高海拔打火石打火機、睡墊／保暖手套與公裝帳篷數同步核對）
+  - 更新 [lessons/food-and-menu-pitfalls.md](./lessons/food-and-menu-pitfalls.md)（正面收錄吸收武陵二秀檢討後之「團炊＋自煮混搭」與早起前晚不煮宵夜實例）
+  - 更新 [lessons/retreat-and-navigation-emergency-pitfalls.md](./lessons/retreat-and-navigation-emergency-pitfalls.md)（收錄 D1 即時分背、D3 合理拆隊與安委「高山症不適者不可獨留營地僅配無線電」原則）
+  - 更新 [index.md](./index.md)
+- **個資脫敏執行**：已全數移除隊員、留守與司機之聯絡電話、學號與緊急聯絡人姓名電話，僅保留隊員姓名／暱稱與分工。
+- **發現之高風險與重複檔提醒**：
+  - **重複版本差異**：`raw/湖湖哈哈計劃書(1).docx` 多了「帳篷分配表（4 頂帳）」與「3 篇完整參考紀錄」；`raw/湖湖哈哈計劃書.docx` 則多了 1 張地圖檔但少了前述兩項（依規範未擅自刪除，待使用者確認處理方式）。
+  - **高風險與文件疏漏**：計畫書公裝表未同步更新為 4 頂帳篷（仍寫 2 頂 4 人帳）；基本資料表與隊員名單表之嚮導 1／2 職稱與聯絡電話填反；缺隊內／會師無線電主備頻率與預備糧清單；高海拔 3,400m 睡墊／毛帽／保暖手套僅標彈性；留守範例殘留「奇萊」且無逾時通報死線；部分隊員體訓表登錄未達強制次數；無本隊檢討報告與結算表。
+
+---
+
 ## [2026-11-22] ingest | 匯入「合歡東峰石門山（2025-09）」計畫書與出隊結算表
 
 - **來源檔案（1 隊共 2 份）**：
