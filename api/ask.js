@@ -90,7 +90,12 @@ export default async function handler(req, res) {
 
   const clubPasscode = process.env.CLUB_PASSCODE;
   const geminiApiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+  const envModel =
+    typeof process.env.GEMINI_MODEL === "string" ? process.env.GEMINI_MODEL.trim() : "";
+  const modelCandidates = Array.from(
+    new Set([envModel, "gemini-3.5-flash-lite", "gemini-3.8-flash"].filter(Boolean))
+  );
+  const PER_MODEL_TIMEOUT_MS = 20000;
 
   if (!clubPasscode) {
     return res.status(500).json({ error: "伺服器尚未設定環境變數 CLUB_PASSCODE。" });
@@ -152,66 +157,97 @@ export default async function handler(req, res) {
     },
   ];
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-    model
-  )}:generateContent`;
+  const attempts = [];
+  let lastStatus = 502;
+  let lastErrorMsg = "模型暫時無法回應，請稍後再試。";
 
-  try {
-    const upstream = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": geminiApiKey,
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: systemPrompt }],
+  for (const currentModel of modelCandidates) {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+      currentModel
+    )}:generateContent`;
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), PER_MODEL_TIMEOUT_MS);
+
+    try {
+      const upstream = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": geminiApiKey,
         },
-        contents,
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 2048,
-        },
-      }),
-    });
+        signal: controller.signal,
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: systemPrompt }],
+          },
+          contents,
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1200,
+          },
+        }),
+      });
 
-    const data = await upstream.json().catch(() => ({}));
+      const data = await upstream.json().catch(() => ({}));
 
-    if (!upstream.ok) {
-      const apiMsg = data?.error?.message || `Gemini API 錯誤（HTTP ${upstream.status}）`;
-      return res.status(upstream.status === 429 ? 429 : 502).json({
-        error:
+      if (!upstream.ok) {
+        const apiMsg = data?.error?.message || `HTTP ${upstream.status}`;
+        attempts.push(`${currentModel}: HTTP ${upstream.status}`);
+        lastStatus = upstream.status === 429 ? 429 : upstream.status === 503 ? 503 : 502;
+        lastErrorMsg =
           upstream.status === 429
             ? "目前查詢流量較高（API 額度限制），請稍候幾秒再試。"
-            : `模型回覆失敗：${apiMsg}`,
+            : upstream.status === 503
+              ? "目前 Gemini 模型負載過高（503），請稍候幾秒再試。"
+              : `模型回覆失敗（${currentModel}）：${apiMsg}`;
+
+        // Retry next fallback model on 503 / 429 / 504
+        if (upstream.status === 503 || upstream.status === 429 || upstream.status === 504) {
+          continue;
+        }
+        return res.status(lastStatus).json({ error: lastErrorMsg, attempts });
+      }
+
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const answer = parts
+        .map((p) => (typeof p.text === "string" ? p.text : ""))
+        .join("")
+        .trim();
+
+      if (!answer) {
+        attempts.push(`${currentModel}: empty response`);
+        lastStatus = 502;
+        lastErrorMsg = "模型未回傳有效內容，請換個方式提問或稍後再試。";
+        continue;
+      }
+
+      const cited = Array.from(
+        new Set(answer.match(/wiki\/[A-Za-z0-9_./-]+\.md/g) || [])
+      );
+
+      return res.status(200).json({
+        answer,
+        model: currentModel,
+        docCount: bundle.docCount,
+        sources: cited,
       });
+    } catch (err) {
+      const isTimeout = err?.name === "AbortError";
+      attempts.push(`${currentModel}: ${isTimeout ? "timeout (20s)" : err.message}`);
+      lastStatus = isTimeout ? 504 : 502;
+      lastErrorMsg = isTimeout
+        ? "模型回應逾時，已嘗試備援模型仍無回應，請稍後再試。"
+        : `連線至 Gemini API 時發生錯誤：${err.message}`;
+      // Auto-fallback to next model on timeout or network error
+      continue;
+    } finally {
+      clearTimeout(timer);
     }
-
-    const parts = data?.candidates?.[0]?.content?.parts || [];
-    const answer = parts
-      .map((p) => (typeof p.text === "string" ? p.text : ""))
-      .join("")
-      .trim();
-
-    if (!answer) {
-      return res.status(502).json({
-        error: "模型未回傳有效內容，請換個方式提問或稍後再試。",
-      });
-    }
-
-    const cited = Array.from(
-      new Set(answer.match(/wiki\/[A-Za-z0-9_./-]+\.md/g) || [])
-    );
-
-    return res.status(200).json({
-      answer,
-      model,
-      docCount: bundle.docCount,
-      sources: cited,
-    });
-  } catch (err) {
-    return res.status(502).json({
-      error: `連線至 Gemini API 時發生錯誤：${err.message}`,
-    });
   }
+
+  return res.status(lastStatus).json({
+    error: `${lastErrorMsg}（已嘗試：${attempts.join(" → ")}）`,
+    attempts,
+  });
 }

@@ -5,7 +5,7 @@
   "functions": {
     "api/ask.js": {
       "includeFiles": "api/_wiki_bundle.json",
-      "maxDuration": 30
+      "maxDuration": 60
     }
   }
 }
