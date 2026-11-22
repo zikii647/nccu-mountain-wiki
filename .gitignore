@@ -1,0 +1,16 @@
+# 保護含個資之原始檔案，避免進入 Git 歷史或意外外流
+raw/
+
+# Office 暫存檔
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.tmp
+
+# 作業系統與編輯器雜檔
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
