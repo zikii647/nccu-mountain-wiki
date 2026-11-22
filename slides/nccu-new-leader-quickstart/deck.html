@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>政大登山隊新領隊開隊速成指南</title>
+  <style>
+    :root {
+      --bg-outer: #0f1f1a;
+      --bg-card: #fbfbf8;
+      --text-main: #1b2a24;
+      --text-muted: #52665e;
+      --accent-pine: #1e563f;
+      --accent-gold: #c98a2c;
+      --border-soft: #dce5e0;
+      --warn-bg: #fff6e5;
+      --warn-border: #d97706;
+      --warn-text: #7c3b00;
+      --caution-bg: #fef2f2;
+      --caution-border: #dc2626;
+      --caution-text: #7f1d1d;
+      --info-bg: #eef7f2;
+      --info-border: #1e563f;
+      --info-text: #133b2b;
+      --note-bg: #f1f5f9;
+      --note-border: #475569;
+      --note-text: #1e293b;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: radial-gradient(circle at top right, #1b362d 0%, var(--bg-outer) 70%);
+      color: var(--text-main);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    .deck-shell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px 28px 66px;
+    }
+    .slide {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: min(1160px, 100%);
+      height: min(670px, 100%);
+      background: var(--bg-card);
+      border-radius: 18px;
+      padding: 36px 48px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+      border-top: 7px solid var(--accent-pine);
+      overflow-y: auto;
+    }
+    .slide.active { display: flex; animation: fadeIn 0.22s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .slide-cover {
+      background: linear-gradient(135deg, #123326 0%, #1d4d3a 60%, #244034 100%);
+      color: #f8faf8;
+      border-top: 7px solid var(--accent-gold);
+    }
+    .slide-cover h1 { color: #ffffff; font-size: 2.35rem; border-bottom: 2px solid rgba(201, 138, 44, 0.7); padding-bottom: 14px; }
+    .slide-cover h2 { color: #f6d38b; font-size: 1.35rem; margin-top: 6px; }
+    .slide-cover li, .slide-cover p { color: #e8f1ec; font-size: 1.08rem; }
+    .slide-cover .alert-important {
+      background: rgba(255, 255, 255, 0.1);
+      border-left-color: var(--accent-gold);
+      color: #ffffff;
+    }
+    .slide-cover .alert-title { color: #f6d38b; }
+    .slide-cover .slide-source { color: #b9cfc5; border-top-color: rgba(255,255,255,0.2); }
+
+    .slide-body { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.75rem;
+      line-height: 1.28;
+      color: var(--accent-pine);
+      border-bottom: 2px solid var(--border-soft);
+      padding-bottom: 10px;
+    }
+    h2 {
+      margin: 2px 0 4px;
+      font-size: 1.18rem;
+      color: #2f5e4b;
+    }
+    p { margin: 0; font-size: 1.02rem; line-height: 1.55; }
+    ul, ol {
+      margin: 0;
+      padding-left: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    li { font-size: 0.98rem; line-height: 1.52; }
+    li.sub-item {
+      margin-left: 1.1rem;
+      font-size: 0.93rem;
+      color: #2f433b;
+      list-style-type: circle;
+    }
+    li.check-item {
+      list-style: none;
+      margin-left: -1.1rem;
+      padding-left: 0.2rem;
+    }
+    li.check-item::before {
+      content: "☐ ";
+      color: var(--accent-pine);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .sub-notes {
+      margin-top: 4px;
+      padding-left: 10px;
+      border-left: 2px solid var(--border-soft);
+      font-size: 0.92rem;
+      color: #364b42;
+      line-height: 1.48;
+    }
+    code {
+      background: #e9f0ec;
+      color: #143f2d;
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.9em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.91rem;
+      line-height: 1.44;
+      margin: 2px 0;
+    }
+    th {
+      background: var(--accent-pine);
+      color: #ffffff;
+      text-align: left;
+      padding: 8px 11px;
+      font-weight: 600;
+    }
+    td {
+      padding: 8px 11px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: #f3f7f5; }
+
+    /* Safety alert / callout styles */
+    .alert {
+      border-left: 5px solid var(--info-border);
+      border-radius: 8px;
+      padding: 11px 15px;
+      margin-top: 4px;
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+    .alert-title { font-weight: 700; margin-bottom: 3px; }
+    .alert-warning {
+      background: var(--warn-bg);
+      border-left-color: var(--warn-border);
+      color: var(--warn-text);
+    }
+    .alert-warning .alert-title::before { content: "⚠️ "; }
+    .alert-caution {
+      background: var(--caution-bg);
+      border-left-color: var(--caution-border);
+      color: var(--caution-text);
+    }
+    .alert-caution .alert-title::before { content: "🚨 "; }
+    .alert-important, .alert-tip {
+      background: var(--info-bg);
+      border-left-color: var(--info-border);
+      color: var(--info-text);
+    }
+    .alert-important .alert-title::before { content: "⛰️ "; }
+    .alert-tip .alert-title::before { content: "🧭 "; }
+    .alert-note {
+      background: var(--note-bg);
+      border-left-color: var(--note-border);
+      color: var(--note-text);
+    }
+    .alert-note .alert-title::before { content: "📌 "; }
+
+    .slide-source {
+      margin-top: 12px;
+      padding-top: 9px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+    /* Bottom navigation HUD */
+    .hud {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: rgba(11, 24, 19, 0.92);
+      color: #d8e6df;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
+    }
+    .hud-controls { display: flex; align-items: center; gap: 10px; }
+    .hud button {
+      background: #1f4b39;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-family: inherit;
+    }
+    .hud button:hover { background: #29634c; }
+    .hud button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .slide-counter {
+      font-weight: 700;
+      min-width: 68px;
+      text-align: center;
+      color: #f6d38b;
+    }
+    .progress-track {
+      position: fixed;
+      bottom: 52px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255,255,255,0.12);
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+    .hud-hint { color: #90aba0; font-size: 0.82rem; }
+
+    @media (max-width: 768px) {
+      .deck-shell { padding: 10px 10px 60px; }
+      .slide { padding: 22px 20px 16px; height: 100%; border-radius: 12px; }
+      h1 { font-size: 1.35rem; }
+      .hud-hint { display: none; }
+    }
+    @media print {
+      html, body { overflow: visible; background: #fff; height: auto; }
+      .deck-shell { display: block; padding: 0; height: auto; }
+      .slide { display: flex !important; page-break-after: always; box-shadow: none; width: 100%; height: auto; margin-bottom: 24px; }
+      .hud, .progress-track { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck-shell" id="deck">
+    <section class="slide slide-cover active" data-slide="01">
+      <div class="slide-body">
+<h1>政大登山隊新領隊開隊速成指南</h1>
+<h2>最高宗旨：確保大家上山安全平安</h2>
+<div class="alert alert-important"><div class="alert-title">核心信念</div><div class="alert-body"><strong>「幾乎所有的山難原因，都可在登山計畫準備時，就被考量與管理預防！」</strong>（2023/05 政大高嚮訓練課）</div></div>
+<ul><li><strong>風險管理三階段</strong>：上山前準備（風險認識與預防）→ 登山過程（風險管理與因應）→ 下山後（檢討改進）</li><li><strong>山難兩大主因</strong>（2022 消防署統計）：最多為<strong>迷途</strong>、次高為<strong>墜落</strong>，且風險間彼此連動</li><li><strong>本簡報定位</strong>：結合社團領隊 SOP 與 2024–2025 歷屆踩坑檢討，助新領隊一次避開前人血淚</li></ul>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/mountain-safety-fundamentals.md、wiki/guides/club-leadership-and-team-management.md</footer>
+    </section>
+    <section class="slide" data-slide="02">
+      <div class="slide-body">
+<h1>開隊第一關：隊伍分級、資格與籌備期</h1>
+<table><thead><tr><th>隊伍分級</th><th>路線天數與條件</th><th>誰能開隊</th></tr></thead><tbody><tr><td><strong>D 級</strong></td><td>3 天以下之路線</td><td>領隊；預備領隊（原則配輔領）</td></tr><tr><td><strong>C 級</strong></td><td>3–5 天，或 ≤3 天含危險地形</td><td>領隊；預備領隊（<strong>必配輔領</strong>）</td></tr><tr><td><strong>B 級</strong></td><td>6–8 天之路線</td><td>具對應經驗之正式領隊</td></tr><tr><td><strong>A 級</strong></td><td>9 日以上之路線</td><td>具對應經驗之正式領隊</td></tr></tbody></table>
+<ul><li><strong>嚴禁越級</strong>：依自身帶隊經驗開隊，非具領隊／預備領隊資格者不得開隊</li><li><strong>預備領隊免輔領例外</strong>：(1) 一日山岳活動；(2) 具 <strong>2 次以上過夜隊</strong>經驗且經<strong>安全委員一致同意</strong>，可獨立開 D 級過夜隊</li><li><strong>籌備時程</strong>：<strong>至少一個月前</strong>啟動開隊工作（實務參考：武陵提前 3 個月、南湖提前 2 個月）</li></ul>
+<div class="alert alert-warning"><div class="alert-title">AI 時效提醒</div><div class="alert-body">以上規定整理自 2023/05 高嚮講義，開隊前請向當屆幹部確認最新社團章程。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/club-leadership-and-team-management.md、wiki/trips/2024-12-wuling-four-peaks.md、wiki/trips/2025-06-nanhu-mabisang.md</footer>
+    </section>
+    <section class="slide" data-slide="03">
+      <div class="slide-body">
+<h1>隊伍管理四原則：人數、新舊比、隊形與決策</h1>
+<ul><li><strong>人數上限</strong>：依交通、營位與幹部比設定，<strong>最好不超過 20 人</strong></li><li><strong>新舊比紅線</strong>：<strong>新生隊伍 <code>2:1</code></strong>（新：舊）；<strong>其他隊伍 <code>1:1</code></strong></li><li class="sub-item">實例對照：2025-12 大霸 13 人（<code>7:6</code> 略高於 1:1）；2025-09 合歡師長隊 17 人（<code>11:6</code> 接近新生隊標準）</li><li><strong>標準行進隊形</strong>：</li></ul>
+<p><code>嚮導</code> → <code>想培育／走慢者</code> → <code>能顧人幹部</code> → <code>新舊交錯</code> → <code>領隊與資深幹部分走中、後</code></p>
+<ul><li class="sub-item">實戰範例：2025-09 合歡師長隊採「<strong>每 2 名師長配 1 名幹部</strong>」高密度護衛，並預訂前後拆隊分工</li><li><strong>最終決策機制</strong>：幹部（特別是有領隊資格者）討論提議，最終由<strong>領隊或輔領拍板</strong></li></ul>
+<div class="alert alert-note"><div class="alert-title">私揪也要守底線</div><div class="alert-body">帶朋友、家人爬山同樣要注意風險管理，不可因非社團活動而省略計畫與留守。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/club-leadership-and-team-management.md、wiki/trips/2025-09-hehuan-east-shimen.md、wiki/trips/2025-12-daba-four-peaks.md</footer>
+    </section>
+    <section class="slide" data-slide="04">
+      <div class="slide-body">
+<h1>路線擇定與行程規劃 SOP：能力圈與時間估算</h1>
+<ul><li><strong>擇定路線第一鐵則</strong>：優先考量<strong>風險與自身能力圈</strong>，而非美景或自己想去的地方</li><li><strong>圖資多源比對</strong>：經建三與 OSM（魯地圖）交叉比對，善用地圖產生器、百年歷史地圖與空拍；切記「傳統路不一定安全」</li><li><strong>行程表必備元素</strong>：登山口交通、<strong>起床／出發／休息／午餐／抵營時間</strong>、里程、爬升下降與<strong>預備天</strong></li><li><strong>時間估算三大原則</strong>：</li><li class="sub-item"><strong>輕重裝、不同植被與地形</strong>須分開估算速度</li><li class="sub-item">嚴選資訊完整且<strong>「行程相似」的參考紀錄</strong>（禁用單人快腳或騎車紀錄）</li><li class="sub-item">高海拔優先排 <strong>D0</strong> 或控制 <strong>D1 不要太累</strong>，避免出發前熬夜誘發高山症</li><li><strong>四大行前風險</strong>：迷途、<strong>腰繞崩塌與大雨後路況</strong>、季節生物（蜂／恙蟲／硬蜱）、缺水失溫中暑</li></ul>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/trip-planning-sop.md、wiki/guides/mountain-safety-fundamentals.md</footer>
+    </section>
+    <section class="slide" data-slide="05">
+      <div class="slide-body">
+<h1>歷屆行程與配速踩坑：太慢摸黑 vs. 衝太快爆掉</h1>
+<ul><li><strong>估算紅線</strong>：大隊／重裝／新手以<strong>上河 × 1.1–1.3 倍</strong>為底線；<strong>冬季日落前留 1.5–2hr 緩衝</strong></li></ul>
+<table><thead><tr><th>隊伍（日期）</th><th>實況對照</th><th>關鍵教訓</th></tr></thead><tbody><tr><td><strong>大霸</strong> 2025-12（13 人）</td><td>D1 誤參騎車與快腳紀錄、08:30 起登少算 1hr，摸黑抵山莊、20:00 才吃飯</td><td>新手<strong>失溫＋高反</strong>；冬季大隊應設 D0</td></tr><tr><td><strong>武陵</strong> 2024-12（8 人）</td><td>兩天壓縮四秀，D1 重裝<strong>上河 0.7</strong> 未壓速，午後透支、D2 棄池有品田</td><td>幹部須主動壓速；冬季勿壓縮長程</td></tr><tr><td><strong>白姑</strong> 2025-04（16 人）</td><td>D2 輕裝<strong>計畫預估 11.5hr（無逐點實走紀錄）</strong>，回程隊距拉長</td><td>練長程、少量多休；午後雷雨<strong>提早起登</strong></td></tr><tr><td><strong>南湖</strong> 2025-06（10 人）</td><td>05:00 起登、不適即分背；<strong>計畫 46.05K／44.3hr vs. 實走 48.49K／45hr49m</strong></td><td>零摸黑且精準吻合計畫</td></tr></tbody></table>
+      </div>
+      <footer class="slide-source">來源：wiki/lessons/schedule-and-night-hiking-pitfalls.md、wiki/trips/2025-12-daba-four-peaks.md、wiki/trips/2024-12-wuling-four-peaks.md、wiki/trips/2025-04-baigu-mountain.md、wiki/trips/2025-06-nanhu-mabisang.md</footer>
+    </section>
+    <section class="slide" data-slide="06">
+      <div class="slide-body">
+<h1>行前倒隊條件與三層應變計畫</h1>
+<ul><li><strong>行前倒隊／取消條件（歷屆計畫書共通基準）</strong>：</li><li class="sub-item">出發前一日發布<strong>寒流</strong>、預報<strong>過半天數下雪（雨）</strong>、或發布<strong>陸上颱風警報</strong></li><li class="sub-item">出隊前 5 天當地發生<strong>震度 5 級以上地震</strong>，或國家公園宣布<strong>延長封園／步道公路坍方</strong></li><li><strong>應變計畫三層次</strong>（2023/05 高嚮講義）：</li></ul>
+<ol><li><strong>逐日撤退計畫</strong>：長天數<strong>每天</strong>以時間、易出事點為分際並條列易迷途點（關門七彩湖範例：馬太鞍溪暴漲<strong>先找安全處紮營觀察一晚未消退則回撤</strong>；水深低於腰<strong>考慮架繩</strong>、及腰以上<strong>考慮原路回撤</strong>）</li><li><strong>行程調整計畫</strong>：單攻行程須設<strong>關門點與拆隊考量</strong>（如 2025-04 白姑草青池 09:30、2025-06 南湖 2.2K 岔 10:00）</li><li><strong>醫療計畫</strong>：針對<strong>不同傷勢、高山症、失溫</strong>等研擬應變</li></ol>
+<div class="alert alert-warning"><div class="alert-title">高山症拆隊留營安全原則（2025-06 南湖安委意見）</div><div class="alert-body">不可讓高山症不適隊員「獨留營地僅配無線電」，須安排幹部陪同或協調山屋協作／他隊協助照看。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/trip-planning-sop.md、wiki/templates/safety-audit-checklist.md、wiki/trips/2025-12-daba-four-peaks.md、wiki/trips/2025-06-nanhu-mabisang.md、wiki/trips/2025-04-baigu-mountain.md</footer>
+    </section>
+    <section class="slide" data-slide="07">
+      <div class="slide-body">
+<h1>撤退決策、迷途與待援四大鐵則</h1>
+<ol><li><strong>絕不倉促改線、鼓起勇氣撤退</strong><div class="sub-notes"><strong>2023/05 高嚮講義案例（大霸西北稜遲歸 2 天）</strong>：因颱風臨時改線、僅有 3 年前舊紀錄，連日大雷雨 D2 延誤卻未撤，耗盡 2 天預備天差點斷糧</div></li><li><strong>準備不足不擅自下溪谷、不盲信布條</strong><div class="sub-notes"><strong>2016-01（2023/05 講義案例，三分子古道迷途）</strong>：惡劣天候盲信布條下溪谷迫降無訊號<br><strong>2025-04 白姑大山</strong>：開段水管維護岔路極易迷途，須勤對 GPX（傳統山徑有布條、水管路無布條）</div></li><li><strong>高山不可只帶外帳、爛天氣勿於稜線等直升機</strong><div class="sub-notes"><strong>2023/05 高嚮講義案例（能高安東軍搭直升機）</strong>：隊員扭傷後爬回稜線苦等直升機 2 天未飛，且只帶外帳差點冷死</div></li><li><strong>建立「身體不適第一時間回報領隊」文化並果斷下撤</strong><div class="sub-notes"><strong>2024-12 武陵四秀</strong>：檢討隊員不適未即時報備；但面對狀態下滑與帳篷受損，D2 果斷棄池有品田原路撤退為正面示範</div></li></ol>
+      </div>
+      <footer class="slide-source">來源：wiki/lessons/retreat-and-navigation-emergency-pitfalls.md、wiki/trips/2024-12-wuling-four-peaks.md、wiki/trips/2025-04-baigu-mountain.md</footer>
+    </section>
+    <section class="slide" data-slide="08">
+      <div class="slide-body">
+<h1>六大登山風險速查與三大迷思</h1>
+<ul><li><strong>破除三大迷思</strong>：有布條航跡仍會迷路；地圖文字須靠實地勘查驗證；圖上看似不遠可能因地形植被極難走</li><li><strong>高山症</strong>：<strong>推定任何症狀皆為高山症</strong>，最有效處置是「<strong>下撤！下撤！下撤！</strong>」（2024-12 武陵曾過遲服藥失效）</li><li><strong>失溫</strong>：立即<strong>避風、換乾衣、快速補熱量</strong>（備薑／黑糖／巧克力）</li><li><strong>迷途與墜崖</strong>：迷途往回走或原地等待；<strong>危險地形不拆隊不獨走</strong>，先保隊伍安全防二次事故（評估：<strong>意識→內傷→外傷</strong>）</li><li><strong>生物與輕重傷</strong>：蜂螫服抗組織胺觀察過敏速下山；<strong>硬蜱／恙蟲下山必就診</strong>；<strong>螞蝗用手拔、禁火燒灑鹽</strong>；留心捕獸夾與爐具草刀安全</li></ul>
+<div class="alert alert-caution"><div class="alert-title">AI 安全提醒（用藥禁忌與過敏性休克）</div><div class="alert-body">1. 丹木斯與類固醇均屬處方藥，須經醫師評估；<strong>磺胺類過敏與蠶豆症（G6PD）禁忌針對丹木斯</strong>，<strong>領隊切勿未經詢問任意給藥</strong>。<br>2. <strong>蜂螫嚴重過敏性休克</strong>（呼吸困難／喉頭水腫／全身蕁麻疹）口服抗組織胺不足，須立即求援（有醫囑者使用 EpiPen）。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/mountain-safety-fundamentals.md、wiki/trips/2024-12-wuling-four-peaks.md</footer>
+    </section>
+    <section class="slide" data-slide="09">
+      <div class="slide-body">
+<h1>行前體訓菜單與 75% 負重輕量化法則</h1>
+<table><thead><tr><th>訓練類別</th><th>多日重裝百岳標準（2025-06 南湖範本）</th><th>折抵與目的</th></tr></thead><tbody><tr><td><strong>負重陡上</strong></td><td>指南宮 <strong>男 18kg／女 16kg × 3 次</strong><br>（24 分、24 分、進階 22 分內）</td><td>近期<strong>過夜隊</strong>可抵 1 次；練陡上肌力與背負</td></tr><tr><td><strong>有氧心肺</strong></td><td>5K 跑步 35 分／30 分內；建議 10K 75 分內</td><td>近期<strong>郊山隊</strong>可抵 1 次 5K</td></tr><tr><td><strong>長程行進</strong></td><td><strong>至少 7 小時連續郊山</strong>（如陽明山西段）</td><td>補強純爬樓梯練不到的長程耐力與下坡控制</td></tr></tbody></table>
+<ul><li><strong>大背「75% 輕量化法則」</strong>：上山大背重控制在體訓負重的 <strong>75%</strong>（男約 13.5kg／女約 12kg）——「背得越重爆得越快！」</li><li><strong>出發前一週管理</strong>：體訓截止設於出發前 3–5 天，叮嚀早睡、規律作息，避免過勞上山誘發高山症</li></ul>
+<div class="alert alert-warning"><div class="alert-title">AI 安全提醒</div><div class="alert-body">體訓長須於截止日實際驗收（防漏登錄）；新生隊或短程輕裝隊應按比例下修負重門檻，避免體訓受傷。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/training-and-conditioning-sop.md、wiki/trips/2025-06-nanhu-mabisang.md</footer>
+    </section>
+    <section class="slide" data-slide="10">
+      <div class="slide-body">
+<h1>行前裝檢、留守與通訊避坑清單</h1>
+<ul><li><strong>裝檢不可省（連兩年踩坑）</strong>：2024-12 武陵漏登山杖／擋風板；2025-12 大霸未裝檢致保暖未核對（失溫高反）與漏爐頭——<strong>保暖衣物為私裝最大地雷</strong></li><li><strong>保暖與營地（原始檢討）</strong>：<strong>秋冬／冬季 2,500m+</strong> 必帶羽絨／化纖、毛帽、手套、乾衣襪；<strong>3,000m+ 夏季露營</strong>亦必帶睡墊／毛帽／手套；備正規擋風板、<strong>打火石式（非防風）打火機</strong>、<strong>2L 小水袋</strong>；強風稜線優先山屋、紮營打釘；食材收內帳、生火不掛隊旗</li><li><strong>通訊與留守（原始規範）</strong>：無線電（白姑、大霸沒電）必測電、帶備電、寫主備頻；inReach（合歡帳號問題）提前 1–2 週測；留守持計畫書報氣象任窗口，簡訊報五要素</li></ul>
+<div class="alert alert-warning"><div class="alert-title">AI 安全提醒（與原始記載區隔）</div><div class="alert-body">1. 補「<strong>最晚回報死線與逾時通報 SOP</strong>」、清「奇萊」殘字，校對電話（2025-09 合歡<strong>基本資料與隊員名單不一致</strong>；2025-06 南湖兩嚮導填反）。<br>2. 國家公園與林班地禁任意引火，日常請用爐具並守 LNT。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/lessons/gear-check-and-winter-warmth-pitfalls.md、wiki/guides/mountain-safety-fundamentals.md、wiki/templates/safety-audit-checklist.md</footer>
+    </section>
+    <section class="slide" data-slide="11">
+      <div class="slide-body">
+<h1>水源調度與高山菜單減時實戰</h1>
+<ul><li><strong>水源計畫三要素</strong>：標明每日取水點與穩定度、缺水備案、估算<strong>公水＋私水</strong>總量</li><li class="sub-item"><strong>缺水神配合（2025-04 白姑，16 人共 52.2L）</strong>：前組搶占松林營地先搭 3 頂帳，後組 7 人取三天水並將 D3 水暫留於下切點，成功避開摸黑搭帳</li><li><strong>高山菜單四大實戰心法</strong>：</li></ul>
+<ol><li><strong>從簡混搭與後期增量</strong>：2025-06 南湖落實 2024-12 武陵檢討，採「<strong>團炊＋自煮混搭</strong>」並取消早起前晚宵夜；2023/05 講義提醒<strong>長天數後期食量回升，份量須增加</strong></li><li><strong>大隊分鍋</strong>：2025-12 大霸 <strong>13 人拆兩組，第二組 6 人內區分素鍋與葷小鍋</strong>，部分配菜山下先滷好即食</li><li><strong>份量與技巧</strong>：主食外勿疊加過多澱粉（2025-12 大霸剩整鍋馬鈴薯）；燴飯改<strong>飯獨立煮、料另外煮</strong>（2025-04 白姑）</li><li><strong>LNT 與範本核對</strong>：拔營巡視防遺留食材（2024-12 武陵曾留高麗菜）；套舊 Excel 必清空舊採買頁</li></ol>
+<div class="alert alert-warning"><div class="alert-title">AI 安全提醒</div><div class="alert-body">設了預備天就須<strong>依預備天數準備 1–2 天份免煮／易煮預備糧</strong>，明確寫進菜單與裝備清單。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/lessons/food-and-menu-pitfalls.md、wiki/guides/trip-planning-sop.md、wiki/trips/2025-12-daba-four-peaks.md、wiki/trips/2025-06-nanhu-mabisang.md</footer>
+    </section>
+    <section class="slide" data-slide="12">
+      <div class="slide-body">
+<h1>下山後別忘記！出隊財務結算 SOP 與罰則</h1>
+<table><thead><tr><th>予山隊費用項目</th><th>收費標準（2025 秋季範本）</th><th>免收／備註</th></tr></thead><tbody><tr><td><strong>安全基金</strong></td><td><code>30 元／人／天</code></td><td>郊山隊非隊員 30 元</td></tr><tr><td><strong>基本盈餘</strong></td><td>過夜／訓練營 <code>50 元／人／天</code>（<strong>上限 200 元</strong>）</td><td><strong>郊山隊非隊員 20 元</strong>；特殊郊山、訓練隊重要幹部免收</td></tr><tr><td><strong>公裝與私裝</strong></td><td>過夜隊依借用計費（須具隊員資格）</td><td><strong>訓練隊免收公裝費</strong>（條文第 17 條）</td></tr><tr><td><strong>inReach</strong></td><td><code>30 元／天</code></td><td>出發前務必確認帳號可用</td></tr></tbody></table>
+<ul><li><strong>標準結算三步驟</strong>：填表開編輯權限給山隊總務覆查（總務僅覆核予山隊費用，隊內開銷自管）→ 以 <code>.xlsx</code> 上傳「過夜隊」資料夾 → 匯款繳回山隊指定帳戶（帳號向當屆總務確認）</li><li><strong>期限與罰則</strong>：<strong>下山後兩週內</strong>完成；逾期每日罰 <code>10 元</code>（累加），或由領隊會議決議<strong>暫停領隊個人出隊資格</strong></li></ul>
+<div class="alert alert-note"><div class="alert-title">AI 時效提醒</div><div class="alert-body">以上為 <strong>2025 年秋季</strong>結算範本費率，出隊前請務必向當屆山隊總務確認最新收費標準。</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/guides/trip-settlement-and-finance-sop.md</footer>
+    </section>
+    <section class="slide" data-slide="13">
+      <div class="slide-body">
+<h1>新領隊出隊前終極檢核＆邁向「用心爬山」</h1>
+<h2>出隊前六大紅線點名</h2>
+<ul><li class="check-item"><strong>資格組成</strong>：未越級、人數 ≤20、新舊比合規、提前 1 個月籌備</li><li class="check-item"><strong>行程時間</strong>：用相似紀錄、留日落緩衝與關門點、高海拔優先排 D0</li><li class="check-item"><strong>應變留守</strong>：逐日撤退分際、易迷途點、留守回報死線與逾時通報 SOP</li><li class="check-item"><strong>水源糧食</strong>：公私水估算、預備糧入單、早起日前晚菜單從簡</li><li class="check-item"><strong>裝檢通訊</strong>：落實保暖裝檢、帶正規擋風板、實測無線電備電與 inReach</li><li class="check-item"><strong>法規保險</strong>：入園／入山證、山屋查驗用證件、含緊急救援之登山險</li></ul>
+<div class="alert alert-tip"><div class="alert-title">爬山的三個層次（黃子豪學長高嚮講義）</div><div class="alert-body"><strong>用體力爬山 → 用腦爬山（技術、安全與文史累積）→ 用心爬山（反思行動、連結土地）</strong>。祝大家每一隊都平安上山、快樂回家！</div></div>
+      </div>
+      <footer class="slide-source">來源：wiki/templates/safety-audit-checklist.md、wiki/guides/club-leadership-and-team-management.md</footer>
+    </section>
+  </main>
+
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <nav class="hud" aria-label="簡報導覽">
+    <div class="hud-title">政大登山隊新領隊開隊速成指南</div>
+    <div class="hud-controls">
+      <button type="button" id="btn-prev" aria-label="上一頁">← 上一頁</button>
+      <span class="slide-counter" id="slide-counter">1 / 13</span>
+      <button type="button" id="btn-next" aria-label="下一頁">下一頁 →</button>
+    </div>
+    <div class="hud-hint">鍵盤 ← / → 或空白鍵翻頁｜Home / End 首尾頁</div>
+  </nav>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('section.slide'));
+      const totalSlides = slides.length;
+      const counterEl = document.getElementById('slide-counter');
+      const progressEl = document.getElementById('progress-fill');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      let currentSlide = 0;
+
+      function showSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+        currentSlide = index;
+        slides.forEach((el, i) => el.classList.toggle('active', i === currentSlide));
+        counterEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+        progressEl.style.width = (((currentSlide + 1) / totalSlides) * 100) + '%';
+        btnPrev.disabled = currentSlide === 0;
+        btnNext.disabled = currentSlide === totalSlides - 1;
+        history.replaceState(null, '', '#slide-' + String(currentSlide + 1).padStart(2, '0'));
+      }
+
+      btnPrev.addEventListener('click', () => showSlide(currentSlide - 1));
+      btnNext.addEventListener('click', () => showSlide(currentSlide + 1));
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault();
+          showSlide(currentSlide + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          showSlide(currentSlide - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          showSlide(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          showSlide(totalSlides - 1);
+        }
+      });
+
+      let touchStartX = null;
+      document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; });
+      document.addEventListener('touchend', (e) => {
+        if (touchStartX === null) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (dx < -50) showSlide(currentSlide + 1);
+        if (dx > 50) showSlide(currentSlide - 1);
+        touchStartX = null;
+      });
+
+      const hashMatch = location.hash.match(/^#slide-(\d+)$/);
+      const initial = hashMatch ? parseInt(hashMatch[1], 10) - 1 : 0;
+      showSlide(initial);
+    })();
+  </script>
+</body>
+</html>
