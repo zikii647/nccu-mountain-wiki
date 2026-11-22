@@ -4,6 +4,23 @@
 
 ---
 
+## [2026-11-22] ingest | 匯入「合歡東峰石門山（2025-09）」計畫書與出隊結算表
+
+- **來源檔案（1 隊共 2 份）**：
+  - `raw/09_19-20 合歡東峰石門山計劃書 ver.2.docx`
+  - `raw/百年校慶行前合歡出隊結算表.xlsx`
+- **新增／異動頁面**：
+  - 新增 [trips/2025-09-hehuan-east-shimen.md](./trips/2025-09-hehuan-east-shimen.md)
+  - 新增 [guides/trip-settlement-and-finance-sop.md](./guides/trip-settlement-and-finance-sop.md)（提煉社團出隊收費、兩週結算期限與罰則、對外活動分帳 SOP）
+  - 更新 [lessons/gear-check-and-winter-warmth-pitfalls.md](./lessons/gear-check-and-winter-warmth-pitfalls.md)（補充 inReach 行前帳號與功能測試提醒）
+  - 更新 [index.md](./index.md)
+- **個資脫敏執行**：已全數移除 17 名隊員（含師長）、留守與司機之聯絡電話、緊急聯絡人姓名電話，以及結算表內之**山隊郵局匯款帳號**。
+- **發現之高風險與異常提醒**：
+  - **高風險**：inReach 因帳號問題未帶上山；計畫書無公裝與無線電配置、將頭燈與低音哨標為彈性（`△`）；行前會改用 PPT 取代；留守範例殘留「奇萊」且無逾時通報死線。
+  - **文件異常與缺漏**：計畫書內嚮導聯絡電話前後頁不一致；安全委員意見與參考紀錄留白；D1 石門山拍攝 0.5hr 後未計入下山步程；缺實際行走紀錄與檢討報告；結算表更新日（2025/11/02）逾下山後兩週期限。
+
+---
+
 ## [2026-11-22] lint | 首輪全站健康檢查與流程更新（納入每批 Commit＋Lint）
 
 - **規則更新**：更新 [AGENTS.md](../AGENTS.md)（4,565 字元，合於 12,000 字元上限），明定每批 Ingest 完成後自動執行 Lint 並建立 Git Commit。
