@@ -90,7 +90,7 @@ export default async function handler(req, res) {
 
   const clubPasscode = process.env.CLUB_PASSCODE;
   const geminiApiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
   if (!clubPasscode) {
     return res.status(500).json({ error: "伺服器尚未設定環境變數 CLUB_PASSCODE。" });
